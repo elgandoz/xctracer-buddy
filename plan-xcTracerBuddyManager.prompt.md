@@ -1,5 +1,8 @@
 # Plan: XCTracer Buddy Manager PWA
 
+> **Status: Implemented.** This file is the original planning document.
+> For the current authoritative handoff context (architecture, gotchas, state of the app), see **[`AGENTS.md`](./AGENTS.md)**.
+
 A fully client-side PWA that manages the `BuddyList.txt` file for XCTracer Maxx variometers (v1/v2/v3). Users can maintain a permanent address book of contacts and compose a device-ready buddy list of up to 50 slots. All state persists in `localStorage`. No backend, no auth.
 
 ---
