@@ -1,7 +1,9 @@
 import type { BuddySlot } from '~/types'
 
 export function parseBuddyListTxt(text: string): BuddySlot[] {
-  const blocks = text.split(/\n\n/)
+  // Normalize line endings (device files may use \r\n or \r)
+  const normalized = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n')
+  const blocks = normalized.split(/\n\n/)
   const dataBlocks = blocks.slice(1).filter(b => b.trim())
   const slots: BuddySlot[] = Array.from({ length: 50 }, (_, i) => ({ slot: i + 1, name: '', radioId: '' }))
 

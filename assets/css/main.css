@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@keyframes slot-flash {
+  0%   { background-color: transparent; }
+  25%  { background-color: color-mix(in srgb, var(--color-sky-400) 35%, transparent); }
+  100% { background-color: transparent; }
+}
+
+.slot-flash {
+  animation: slot-flash 0.8s ease-out;
+}

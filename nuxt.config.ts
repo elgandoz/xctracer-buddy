@@ -2,7 +2,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-04-16',
   ssr: false,
   modules: ['@nuxt/ui', '@vite-pwa/nuxt'],
-  css: [],
+  css: ['~/assets/css/main.css'],
   nitro: { preset: 'static' },
   vite: {
     define: { 'process.env.NODE_ENV': '"production"' }
