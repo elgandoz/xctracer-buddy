@@ -25,7 +25,7 @@ npm run generate    # static build → .output/public/
 
 ## BuddyList.txt File Format
 
-```
+```ini
 # Buddy List
 
 Buddy1Name=AleG
@@ -42,6 +42,7 @@ Buddy50RadioID=
 ```
 
 **Rules:**
+
 - Header `# Buddy List`, followed by a blank line
 - 50 slots, always exactly 50, 1-indexed
 - Each slot: `BuddyNName=VALUE\nBuddyNRadioID=VALUE\n` then blank line
@@ -63,13 +64,16 @@ Buddy50RadioID=
 | `@types/sortablejs` | ^1.15.9 | Types for above |
 
 **`@nuxt/ui` v4 CSS requirement** — `assets/css/main.css` must contain:
+
 ```css
 @import "tailwindcss";
 @import "@nuxt/ui";
 ```
+
 And `nuxt.config.ts` must have `css: ['~/assets/css/main.css']`. Without this, all styles are missing.
 
 **Color tokens** — use Nuxt UI semantic CSS variables, never hardcoded Tailwind colors:
+
 - `--ui-bg`, `--ui-bg-elevated`, `--ui-border`, `--ui-text-muted`
 - These adapt automatically to light/dark/system color mode
 
@@ -77,7 +81,7 @@ And `nuxt.config.ts` must have `css: ['~/assets/css/main.css']`. Without this, a
 
 ## File Structure
 
-```
+```ini
 xctracer-buddy/
 ├── app.vue                        # Root layout: header, 2-col grid, help modal, color mode toggle
 ├── app.config.ts                  # Nuxt UI theme: primary: 'sky', neutral: 'slate'
@@ -122,6 +126,7 @@ interface Contact {
 ```
 
 **`localStorage` keys:**
+
 - `xctracer-buddies` → `BuddySlot[]` (always 50 elements)
 - `xctracer-contacts` → `Contact[]` (unlimited)
 
@@ -159,8 +164,9 @@ The `:key` trick forces Vue to tear down and recreate the DOM node — this is t
 The standard Vue + SortableJS conflict: SortableJS moves DOM nodes, then Vue's re-render conflicts with the mutated DOM.
 
 **Fix** in `BuddyListPanel.vue`:
+
 1. `onStart`: capture `evt.item.nextElementSibling` before the drag
-2. `onEnd`: call `evt.from.insertBefore(evt.item, _nextSibling)` to **revert** SortableJS's DOM mutation before calling `moveSlot()`
+2. `onEnd`: call `evt.from.insertBefore(evt.item, _nextSibling)` to __revert__ SortableJS's DOM mutation before calling `moveSlot()`
 3. Vue then re-renders onto a clean DOM it recognizes
 
 Do **not** use `nextTick(() => initSortable())` — it was tried and caused further issues. The revert approach is correct.
@@ -172,20 +178,24 @@ SortableJS config: `ghostClass: 'invisible'` hides the placeholder slot while dr
 ## Component Behaviour Details
 
 ### BuddyListPanel
+
 - "Download BuddyList.txt" button is at the **top** (above the list), not the bottom
 - 50 rows always rendered (empty ones at 50% opacity)
 - Drag handle (`.drag-handle`) triggers SortableJS; ↑↓ buttons call `moveSlot`
 
 ### ContactsPanel toolbar (top, left to right)
-```
+
+```ini
 [+ Add Contact]  [↑ Import]  [↓ Export]     [A→Z]  [N contacts]
 ```
+
 - **Add Contact**: prepends an empty contact at the top (`atTop = true`). If an empty contact already exists, flashes it instead of creating a duplicate.
 - **Import**: file picker, parses `BuddyList.txt`, merges into contacts. On RadioID conflict → conflict modal. Also loads into buddy list slots.
 - **Export**: downloads `BuddyList-export.txt` (first 50 contacts padded to 50 slots)
 - **A→Z**: sorts contacts alphabetically in-place
 
 ### Conflict Resolution Modal
+
 Triggered on import when an incoming slot's RadioID matches an existing contact.
 
 - Shows "Existing" vs "Incoming" side-by-side
@@ -195,6 +205,7 @@ Triggered on import when an incoming slot's RadioID matches an existing contact.
 - Deduplication key: **RadioID only** (case-insensitive). Duplicate names are allowed.
 
 ### ContactRow
+
 - "Add to Buddies" (←) button is **leftmost** in the row, pointing left toward the buddy panel
 - If contact's RadioID already exists in buddy list: shows warning toast + flashes the existing buddy slot
 - If buddy list is full (50/50): shows error toast
